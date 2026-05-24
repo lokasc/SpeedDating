@@ -7,6 +7,9 @@ extends CharacterBody3D
 @export var start_turn_speed : float = 0.5
 @export var max_turn_speed : float = 3
 @export var turn_accel : float = 0.5
+@export var drift_thres: float = 5
+@export var drift_angle: float = 60
+@export var drift_force: float = 5
 
 var current_turn_angle : float = 0
 var current_speed : float = 0
@@ -19,6 +22,7 @@ const SPEED = 5.0
 var turn_dir : float = 0 # -1 is left, 1 is right. 
 var is_accelerate : bool
 var is_break : bool
+var is_drifting: bool
 
 func _physics_process(delta: float) -> void:
 	update_input()
@@ -34,7 +38,9 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		
 	
+			
 	# turning
 	if turn_dir != 0:
 		current_turn_speed += turn_accel * delta
@@ -47,13 +53,19 @@ func _physics_process(delta: float) -> void:
 	else:
 		current_turn_speed = 0
 	
-
+	var drift_boost: Vector3
+	if is_drifting:
+		if current_speed > drift_thres and turn_dir!=0:
+			var boost_sign = sign(turn_dir)
+			drift_boost = (-transform.basis.z).rotated(Vector3.UP, deg_to_rad(drift_angle) * boost_sign).normalized()
+			
 	# apply speed.
 	var forward_dir = global_transform.basis.z
-	velocity = forward_dir * current_speed
+	velocity = forward_dir * current_speed + drift_boost*drift_force
 	move_and_slide()
 
 func update_input():
 	turn_dir = Input.get_axis("left", "right")
 	is_accelerate = Input.is_action_pressed("accelerate")
 	is_break = Input.is_action_pressed("break")
+	is_drifting = Input.is_action_pressed("drift")
