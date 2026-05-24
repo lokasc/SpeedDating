@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://bksgnc37qw0nh"]
+
+[ext_resource type="PackedScene" uid="uid://8p81dhdwnnw6" path="res://european-delivery-van - Copy/source/van_european_delivery.fbx" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://dxxm4566a58rj" path="res://player.gd" id="1_onrkg"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4flbx"]
+size = Vector3(2.7817383, 2.4069824, 5.3082275)
+
+[node name="Player" type="CharacterBody3D" unique_id=832478151]
+script = ExtResource("1_onrkg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=932531669]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10913086, 0.2965088, -0.18865967)
+shape = SubResource("BoxShape3D_4flbx")
+
+[node name="Model" parent="." unique_id=1584740841 instance=ExtResource("1_4flbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -2)

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://nuju6tbj7lab"]
+
+[ext_resource type="PackedScene" uid="uid://bksgnc37qw0nh" path="res://player.tscn" id="1_ig7tw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ig7tw"]
+albedo_color = Color(0, 0, 0, 1)
+
+[node name="Main" type="Node" unique_id=160270980]
+
+[node name="Map" type="Node3D" parent="." unique_id=755785002]
+
+[node name="CharacterBody3D" parent="Map" unique_id=832478151 instance=ExtResource("1_ig7tw")]
+deceleration = 5.0
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Map" unique_id=835074275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6551208, -1.401392, -2.6486816)
+use_collision = true
+size = Vector3(75, 1, 75)
+material = SubResource("StandardMaterial3D_ig7tw")
+
+[node name="Camera3D" type="Camera3D" parent="Map" unique_id=819881689]
+transform = Transform3D(1, 0, 0, 0, 0.7192064, 0.69479644, 0, -0.69479644, 0.7192064, 0, 6.6382456, 9.295419)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1372002409]
+transform = Transform3D(1, 0, 0, 0, -0.90601987, 0.42323512, 0, -0.42323512, -0.90601987, 0, 19.33, 0)
+light_energy = 3.207
