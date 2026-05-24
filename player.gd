@@ -38,7 +38,7 @@ func _physics_process(delta: float) -> void:
 	# turning
 	if turn_dir != 0:
 		current_turn_speed += turn_accel * delta
-		clampf(current_turn_speed, start_turn_speed, max_turn_speed)
+		current_turn_speed = clampf(current_turn_speed, start_turn_speed, max_turn_speed)
 		current_turn_angle = -turn_dir * delta * current_turn_speed
 		# clampf(current_turn_angle, -max_turn_angle, max_turn_angle)
 		rotate_y(current_turn_angle)
