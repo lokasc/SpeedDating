@@ -19,7 +19,7 @@ size = Vector3(75, 1, 75)
 material = SubResource("StandardMaterial3D_ig7tw")
 
 [node name="Camera3D" type="Camera3D" parent="Map" unique_id=819881689]
-transform = Transform3D(1, 0, 0, 0, 0.7192064, 0.69479644, 0, -0.69479644, 0.7192064, 0, 6.6382456, 9.295419)
+transform = Transform3D(1, 0, 0, 0, 0.19354947, 0.98109055, 0, -0.98109055, 0.19354947, 0, 37.242954, 9.295419)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1372002409]
 transform = Transform3D(1, 0, 0, 0, -0.90601987, 0.42323512, 0, -0.42323512, -0.90601987, 0, 19.33, 0)

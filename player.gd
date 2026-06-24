@@ -7,13 +7,15 @@ extends CharacterBody3D
 @export var start_turn_speed : float = 0.5
 @export var max_turn_speed : float = 3
 @export var turn_accel : float = 0.5
-@export var drift_thres: float = 5
-@export var drift_angle: float = 60
-@export var drift_force: float = 5
+@export var drift_thres: float = 1
+@export var drift_force: float = 1.1
+@export var drift_bias: float = 0.8
+@export var drift_friction: float = 15
 
 var current_turn_angle : float = 0
 var current_speed : float = 0
 var current_turn_speed : float = 0
+var initial_drift_angle: Vector3 = Vector3.ZERO;
 
 const SPEED = 5.0
 
@@ -42,24 +44,33 @@ func _physics_process(delta: float) -> void:
 	
 			
 	# turning
-	if turn_dir != 0:
-		if is_accelerate:
-			current_turn_speed += turn_accel * delta
-			current_turn_speed = clampf(current_turn_speed, start_turn_speed, max_turn_speed)
+	var dir: Vector3 = global_transform.basis.z;
+	if abs(turn_dir) > 0.01 and is_accelerate:
+		current_turn_speed += turn_accel * delta
+		current_turn_speed = clampf(current_turn_speed, start_turn_speed, max_turn_speed)
+		current_turn_angle = turn_accel * -turn_dir;
+		if (is_drifting && current_speed > drift_thres):
+			# && current_speed > drift_thres
+			current_turn_speed *= drift_force
+			current_turn_angle = -turn_dir * delta * current_turn_speed;
+			var basis_z = global_transform.basis.z
+			
+			dir = (initial_drift_angle*(drift_bias) + basis_z*(1-drift_bias)).normalized()
+			current_speed -= drift_friction * delta
+			rotate_y(current_turn_angle)
+			
+			# sliding_velocity = Vector3(sin(current_turn_angle), 0, cos(current_turn_angle))
+		else:
 			current_turn_angle = -turn_dir * delta * current_turn_speed
+			initial_drift_angle = dir
 			rotate_y(current_turn_angle)
 	else:
-		current_turn_speed = 0
-	
-	var drift_boost: Vector3
-	if is_drifting:
-		if current_speed > drift_thres and turn_dir!=0:
-			var boost_sign = sign(turn_dir)
-			drift_boost = (-transform.basis.z).rotated(Vector3.UP, deg_to_rad(drift_angle) * boost_sign).normalized()
+		current_turn_angle = 0
 			
 	# apply speed.
-	var forward_dir = global_transform.basis.z
-	velocity = forward_dir * current_speed + drift_boost*drift_force
+	
+	
+	velocity = dir*current_speed
 	move_and_slide()
 
 func update_input():
